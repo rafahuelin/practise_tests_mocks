@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 from main import get_joke, len_joke
 
 
-class TestAdd(unittest.TestCase):
+class TestJoke(unittest.TestCase):
 
     @patch("main.get_joke")
     def test_len_joke(self, mock_get_joke):
