@@ -1,4 +1,6 @@
+import requests
 import unittest
+from requests.exceptions import HTTPError, Timeout
 from unittest.mock import patch, MagicMock
 
 from main import get_joke, len_joke
@@ -30,6 +32,23 @@ class TestJoke(unittest.TestCase):
         mock_requests.get.return_value = mock_response
 
         self.assertEqual(get_joke(), "No jokes")
+
+    @patch("main.requests")
+    def test_get_joke_timeout_exception(self, mock_requests):
+        mock_requests.exceptions = requests.exceptions
+        mock_requests.get.side_effect = Timeout("The server is taking its time...")
+
+        self.assertEqual(get_joke(), "No jokes")
+
+    @patch("main.requests")
+    def test_get_joke_raise_for_status(self, mock_request):
+        mock_response = MagicMock(status_code=400)
+        mock_response.raise_for_status.side_effect = HTTPError("Something goes wrong")
+
+        mock_request.exceptions = requests.exceptions
+        mock_request.get.return_value = mock_response
+
+        self.assertEqual(get_joke(), "HTTPError was raised")
 
 
 if __name__ == "__main__":
