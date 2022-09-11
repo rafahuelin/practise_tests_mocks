@@ -1,4 +1,4 @@
-import requests
+import re
 import responses
 import unittest
 
@@ -13,6 +13,16 @@ class TestGetJokeWithResponses(unittest.TestCase):
     def test_get_joke_returns_joke(self):
         responses.get(
             url="http://api.icndb.com/jokes/random",
+            json={"value": {"joke": "super funny joke"}},
+            status=200
+        )
+
+        self.assertEqual(get_joke(), "super funny joke")
+
+    @responses.activate
+    def test_get_joke_returns_joke(self):
+        responses.get(
+            url=re.compile(".*api.*icndb.*com.*jokes.*random"),
             json={"value": {"joke": "super funny joke"}},
             status=200
         )
@@ -42,7 +52,6 @@ class TestGetJokeWithResponses(unittest.TestCase):
     def test_get_joke_raises_general_exception(self):
         responses.get(
             url="http://api.icndb.com/jokes/random",
-            # json={"value": {"joke": "super funny joke"}},
             body=Exception("General exception")
         )
 
