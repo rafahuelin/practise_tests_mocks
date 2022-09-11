@@ -38,7 +38,7 @@ class TestJoke(unittest.TestCase):
         mock_requests.exceptions = requests.exceptions
         mock_requests.get.side_effect = Timeout("The server is taking its time...")
 
-        self.assertEqual(get_joke(), "No jokes")
+        self.assertEqual(get_joke(), "No jokes because a timeout")
 
     @patch("main.requests")
     def test_get_joke_raise_for_status(self, mock_request):
