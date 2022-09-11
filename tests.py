@@ -48,7 +48,12 @@ class TestJoke(unittest.TestCase):
         mock_request.exceptions = requests.exceptions
         mock_request.get.return_value = mock_response
 
-        self.assertEqual(get_joke(), "HTTPError was raised")
+        self.assertRaises(HTTPError, get_joke)
+
+        with self.assertRaises(HTTPError) as ctx:
+            get_joke()
+
+        self.assertEqual(str(ctx.exception), "Something goes wrong")
 
 
 if __name__ == "__main__":
