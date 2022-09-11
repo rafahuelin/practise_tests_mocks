@@ -16,7 +16,7 @@ def get_joke():
         if not 400 <= response.status_code < 600:
             return joke
     except requests.exceptions.Timeout:
-        joke = "No jokes"
+        joke = "No jokes because a timeout"
     except requests.exceptions.ConnectionError:
         joke = "No jokes"
     else:
